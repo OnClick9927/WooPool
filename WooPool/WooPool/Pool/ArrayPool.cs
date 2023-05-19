@@ -96,7 +96,7 @@ namespace WooPool
                     {
                         int _len = t.Length;
                         _lengthqueue.Enqueue(_len);
-                        pool.Enqueue(t);
+                        RealSet(t, arg);
                     }
                     return true;
                 }

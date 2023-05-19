@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace WooPool
 {
+
     /// <summary>
     /// 基础对象池
     /// </summary>
@@ -55,8 +56,10 @@ namespace WooPool
                 {
                     t = CreateNew(arg);
                     OnCreate(t, arg);
+                    (t as IPoolObject)?.OnAllocate();
                 }
                 OnGet(t, arg);
+                (t as IPoolObject)?.OnGet();
                 return t;
             }
         }
@@ -65,13 +68,20 @@ namespace WooPool
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="args"></param>
-        public void Set(object obj, IPoolArgs args)
+        public bool Set(object obj, IPoolArgs args)
         {
             if (obj is T)
             {
-                Set((T)obj, args);
+                return Set((T)obj, args);
             }
+            return false;
         }
+        protected void RealSet(T t, IPoolArgs arg = null)
+        {
+            pool.Enqueue(t);
+            (t as IPoolObject)?.OnSet();
+        }
+
         /// <summary>
         /// 回收
         /// </summary>
@@ -86,7 +96,7 @@ namespace WooPool
                 {
                     if (OnSet(t, arg))
                     {
-                        pool.Enqueue(t);
+                        RealSet(t, arg);
                     }
                     return true;
                 }
@@ -109,9 +119,7 @@ namespace WooPool
                 {
                     var t = pool.Dequeue();
                     OnClear(t, arg);
-                    IDisposable dispose = t as IDisposable;
-                    if (dispose != null)
-                        dispose.Dispose();
+                    (t as IDisposable)?.Dispose();
                 }
             }
         }

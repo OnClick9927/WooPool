@@ -19,6 +19,6 @@ namespace WooPool
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="args"></param>
-        void Set(object obj,IPoolArgs args);
+        bool Set(object obj,IPoolArgs args);
     }
 }

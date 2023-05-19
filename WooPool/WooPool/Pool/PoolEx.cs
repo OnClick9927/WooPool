@@ -76,18 +76,7 @@ namespace WooPool
             return result;
         }
 
-        private static IRecyclableObjectCollection collection = new RecyclableObjectCollection();
-        public static IRecyclableObjectCollection GetCollection()
-        {
-            return collection;
-        }
-        public static void SetCollection(IRecyclableObjectCollection collection)
-        {
-            PoolEx.collection = collection;
-        }
-        public static void SetDefaultCollection()
-        {
-            SetCollection(PoolEx.collection);
-        }
+
+   
     }
 }
