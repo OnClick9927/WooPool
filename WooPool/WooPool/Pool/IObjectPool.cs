@@ -17,8 +17,8 @@ namespace WooPool
         /// <summary>
         /// 回收
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="args"></param>
+        /// <param name="obj">回收的对象</param>
+        /// <param name="args">参数</param>
         bool Set(object obj,IPoolArgs args);
     }
 }

@@ -5,9 +5,10 @@ using System.Reflection;
 namespace WooPool
 {
     /// <summary>
-    /// 统一类型的对象池
+    /// 基类对象池
     /// </summary>
-    /// <typeparam name="T">基础类型</typeparam>
+    /// <remarks>可以用于从对象池中取出对应基类的子类对象</remarks>
+    /// <typeparam name="T">对象的基类类型</typeparam>
     public abstract class BaseTypePool<T> : PoolUnit
     {
 
@@ -93,7 +94,7 @@ namespace WooPool
             }
         }
         /// <summary>
-        /// 創建对象池
+        /// 创建对象池
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
@@ -103,7 +104,7 @@ namespace WooPool
         }
 
         /// <summary>
-        /// 获取数据
+        /// 获取对象
         /// </summary>
         /// <param name="type"></param>
         /// <param name="arg"></param>
@@ -119,7 +120,7 @@ namespace WooPool
             return (T)m2.Invoke(this, new object[] { arg });
         }
         /// <summary>
-        /// 回收数据
+        /// 回收对象
         /// </summary>
         /// <param name="type"></param>
         /// <param name="t"></param>
@@ -135,7 +136,7 @@ namespace WooPool
             m2.Invoke(this, new object[] { t, arg });
         }
         /// <summary>
-        /// 获取数据
+        /// 获取对象
         /// </summary>
         /// <typeparam name="Object"></typeparam>
         /// <param name="arg"></param>
@@ -148,7 +149,7 @@ namespace WooPool
         }
 
         /// <summary>
-        /// 回收数据
+        /// 回收对象
         /// </summary>
         /// <typeparam name="Object"></typeparam>
         /// <param name="t"></param>
@@ -181,7 +182,7 @@ namespace WooPool
         }
 
         /// <summary>
-        /// 释放
+        /// 销毁对象池
         /// </summary>
         public new void Dispose()
         {

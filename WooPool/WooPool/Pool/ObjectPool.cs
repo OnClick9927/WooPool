@@ -20,29 +20,18 @@ namespace WooPool
         /// </summary>
         protected object para = new object();
         /// <summary>
-        /// 存储数据类型
+        /// 对象池的对象的类型
         /// </summary>
         public virtual Type type { get { return typeof(T); } }
-
         /// <summary>
-        /// 池子数量
+        /// 对象池中当前对象的数量
         /// </summary>
         public int count { get { return pool.Count; } }
-
-
         /// <summary>
-        /// 释放时
+        /// 从对象池中获取对象
         /// </summary>
-        protected override void OnDispose()
-        {
-            Clear(null);
-        }
-
-        /// <summary>
-        /// 获取
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
+        /// <param name="arg">获取参数</param>
+        /// <returns>对应对象池类型的对象</returns>
         public virtual T Get(IPoolArgs arg = null)
         {
             lock (para)
@@ -64,10 +53,11 @@ namespace WooPool
             }
         }
         /// <summary>
-        /// 回收
+        /// 将对象回收
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="args"></param>
+        /// <param name="obj">被回收的对象</param>
+        /// <param name="args">回收参数</param>
+        /// <returns>对象是否回收成功</returns>
         public bool Set(object obj, IPoolArgs args)
         {
             if (obj is T)
@@ -81,13 +71,12 @@ namespace WooPool
             pool.Enqueue(t);
             (t as IPoolObject)?.OnSet();
         }
-
         /// <summary>
-        /// 回收
+        /// 将对象回收
         /// </summary>
-        /// <param name="t"></param>
-        /// <param name="arg"></param>
-        /// <returns></returns>
+        /// <param name="t">对应类型的对象</param>
+        /// <param name="arg">回收参数</param>
+        /// <returns>对象是否回收成功</returns>
         public virtual bool Set(T t, IPoolArgs arg = null)
         {
             lock (para)
@@ -106,11 +95,10 @@ namespace WooPool
                 }
             }
         }
-
         /// <summary>
-        /// 清除
+        /// 清空对象池里的所有对象
         /// </summary>
-        /// <param name="arg"></param>
+        /// <param name="arg">清空参数</param>
         public void Clear(IPoolArgs arg = null)
         {
             lock (para)
@@ -124,16 +112,16 @@ namespace WooPool
             }
         }
         /// <summary>
-        /// 清除
+        /// 清除对象池里一定数量的对象
         /// </summary>
-        /// <param name="count"></param>
-        /// <param name="arg"></param>
-        public void Clear(int count, IPoolArgs arg = null)
+        /// <param name="clearCount">需要清除的数量</param>
+        /// <param name="arg">清除参数</param>
+        public void Clear(int clearCount, IPoolArgs arg = null)
         {
             lock (para)
             {
-                count = count > pool.Count ? 0 : pool.Count - count;
-                while (pool.Count > count)
+                int restCount = clearCount > pool.Count ? 0 : pool.Count - clearCount;
+                while (pool.Count > restCount)
                 {
                     var t = pool.Dequeue();
                     OnClear(t, arg);
@@ -143,36 +131,43 @@ namespace WooPool
         /// <summary>
         /// 创建一个新对象
         /// </summary>
-        /// <param name="arg"></param>
+        /// <param name="arg">创建参数</param>
         /// <returns></returns>
         protected abstract T CreateNew(IPoolArgs arg);
         /// <summary>
-        /// 数据被清除时
+        /// 对象被清除时调用
         /// </summary>
-        /// <param name="t"></param>
-        /// <param name="arg"></param>
+        /// <param name="t">对应类型的对象</param>
+        /// <param name="arg">清除参数</param>
         protected virtual void OnClear(T t, IPoolArgs arg) { }
         /// <summary>
-        /// 数据被回收时，返回true可以回收
+        /// 对象被回收时调用
         /// </summary>
-        /// <param name="t"></param>
-        /// <param name="arg"></param>
-        /// <returns></returns>
+        /// <param name="t">回收的对象</param>
+        /// <param name="arg">回收参数</param>
+        /// <returns>对象是否回收成功</returns>
         protected virtual bool OnSet(T t, IPoolArgs arg)
         {
             return true;
         }
         /// <summary>
-        /// 数据被获取时
+        /// 对象被获取时调用
         /// </summary>
-        /// <param name="t"></param>
-        /// <param name="arg"></param>
+        /// <param name="t">获取的对象</param>
+        /// <param name="arg">获取参数</param>
         protected virtual void OnGet(T t, IPoolArgs arg) { }
         /// <summary>
-        /// 数据被创建时
+        /// 对象被创建时调用
         /// </summary>
-        /// <param name="t"></param>
-        /// <param name="arg"></param>
+        /// <param name="t">创建的对象</param>
+        /// <param name="arg">创建参数</param>
         protected virtual void OnCreate(T t, IPoolArgs arg) { }
+        /// <summary>
+        /// 对象池被销毁时调用
+        /// </summary>
+        protected override void OnDispose()
+        {
+            Clear(null);
+        }
     }
 }
