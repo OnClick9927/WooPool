@@ -24,9 +24,10 @@ namespace WooPool
         static private GPool gPool = new GPool();
 
         /// <summary>
-        /// 获取全局对象池数量
+        /// 获取对应类型对象池中的对象数量
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">类型</typeparam>
+        /// <returns>对应类型的对象池中对象的数量</returns>
         public static int GetGlbalPoolCount<T>()
         {
             return gPool.GetPoolCount<T>();
@@ -34,8 +35,8 @@ namespace WooPool
         /// <summary>
         /// 设置全局对象池
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="pool"></param>
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="pool">对象池</param>
         public static void SetGlbalPool<T>(ObjectPool<T> pool)
         {
             gPool.SetPool(pool);
@@ -43,9 +44,9 @@ namespace WooPool
         /// <summary>
         /// 全局分配
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="arg"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="arg">分配参数</param>
+        /// <returns>对应的类型的对象</returns>
         public static T GlobalAllocate<T>(IPoolArgs arg = null) where T : class
         {
             return gPool.Get<T>(arg);
@@ -57,9 +58,9 @@ namespace WooPool
         /// <summary>
         /// 全局回收
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="t"></param>
-        /// <param name="arg"></param>
+        /// <typeparam name="T">回收的对象类型</typeparam>
+        /// <param name="t">回收的对象</param>
+        /// <param name="arg">回收参数</param>
         public static void GlobalRecyle<T>(T t, IPoolArgs arg = null) where T : class
         {
             gPool.Set(t, arg);
@@ -67,16 +68,13 @@ namespace WooPool
         /// <summary>
         /// 分配数组
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="length"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">数组的元素类型</typeparam>
+        /// <param name="length">数组长度</param>
+        /// <returns>分配的数组对象</returns>
         public static T[] GlobalAllocateArray<T>(int length)
         {
             var result = GlobalAllocate<T[]>(new ArrayPoolArg(length));
             return result;
-        }
-
-
-   
+        }   
     }
 }

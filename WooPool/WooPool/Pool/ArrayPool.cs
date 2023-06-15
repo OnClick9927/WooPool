@@ -29,10 +29,10 @@ namespace WooPool
     {
         private Queue<int> _lengthqueue = new Queue<int>();
         /// <summary>
-        /// 创建
+        /// 创建数组
         /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
+        /// <param name="arg">创建参数</param>
+        /// <returns>创建出来的数组</returns>
         protected override T[] CreateNew(IPoolArgs arg)
         {
             ArrayPoolArg len = (ArrayPoolArg)arg;
@@ -41,10 +41,10 @@ namespace WooPool
         Queue<T[]> queue = new Queue<T[]>();
 
         /// <summary>
-        /// 获取
+        /// 从数组对象池中获取数组对象
         /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
+        /// <param name="arg">参数</param>
+        /// <returns>数组对象</returns>
         public override T[] Get(IPoolArgs arg = null)
         {
             ArrayPoolArg len = (ArrayPoolArg)arg;
@@ -81,11 +81,11 @@ namespace WooPool
         }
 
         /// <summary>
-        /// 回收
+        /// 回收数组对象
         /// </summary>
-        /// <param name="t"></param>
-        /// <param name="arg"></param>
-        /// <returns></returns>
+        /// <param name="t">数组对象</param>
+        /// <param name="arg">参数</param>
+        /// <returns>回收是否成功</returns>
         public override bool Set(T[] t, IPoolArgs arg = null)
         {
             lock (para)
@@ -102,7 +102,6 @@ namespace WooPool
                 }
                 else
                 {
-                    
                     return false;
                 }
             }
