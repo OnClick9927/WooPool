@@ -45,8 +45,12 @@ namespace WooPool
         /// </summary>
         /// <param name="arg">参数</param>
         /// <returns>数组对象</returns>
-        public override T[] Get(IPoolArgs arg = null)
+        public override T[] Get(IPoolArgs arg)
         {
+            if (arg is null)
+            {
+                throw new System.Exception("含有数组长度的参数不能为空！");
+            }
             ArrayPoolArg len = (ArrayPoolArg)arg;
             int length = len.length;
             lock (para)

@@ -198,6 +198,10 @@ namespace WooPool
             }
         }
 
+        protected override void OnDispose()
+        {
+
+        }
     }
 
 }

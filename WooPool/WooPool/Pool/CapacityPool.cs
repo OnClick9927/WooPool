@@ -26,7 +26,7 @@ namespace WooPool
         /// <returns>对象是否回收成功，如果容量满了则回收失败</returns>
         protected override bool OnSet(T t, IPoolArgs arg)
         {
-            return count <= capacity;
+            return count < capacity;
         }
     }
 

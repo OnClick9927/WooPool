@@ -81,12 +81,9 @@ namespace WooPool
         {
             lock (para)
             {
-                if (!pool.Contains(t))
+                if (!pool.Contains(t) && OnSet(t, arg))
                 {
-                    if (OnSet(t, arg))
-                    {
-                        RealSet(t, arg);
-                    }
+                    RealSet(t, arg);
                     return true;
                 }
                 else
